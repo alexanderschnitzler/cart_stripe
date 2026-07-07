@@ -1,9 +1,9 @@
 <?php
 
 declare(strict_types=1);
-namespace GeorgRinger\CartStripe\Service;
+namespace Schnitzler\CartStripe\Service;
 
-use GeorgRinger\CartStripe\Configuration;
+use Schnitzler\CartStripe\Configuration;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Stripe\Checkout\Session;

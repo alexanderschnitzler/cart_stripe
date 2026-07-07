@@ -1,5 +1,5 @@
 {
-    "name": "georgringer/cart-stripe",
+    "name": "schnitzler/cart-stripe",
     "description": "Shopping Cart(s) for TYPO3 - Stripe Payment Provider",
     "license": [
         "GPL-2.0+"
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "GeorgRinger\\CartStripe\\": "Classes"
+            "Schnitzler\\CartStripe\\": "Classes"
         }
     },
     "extra": {

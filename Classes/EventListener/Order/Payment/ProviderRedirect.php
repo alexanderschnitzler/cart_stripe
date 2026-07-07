@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace GeorgRinger\CartStripe\EventListener\Order\Payment;
+namespace Schnitzler\CartStripe\EventListener\Order\Payment;
 
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use Extcode\Cart\Domain\Model\Cart;
@@ -11,8 +11,8 @@ use Extcode\Cart\Domain\Model\Order\BillingAddress;
 use Extcode\Cart\Domain\Model\Order\Item as OrderItem;
 use Extcode\Cart\Domain\Repository\CartRepository;
 use Extcode\Cart\Event\Order\PaymentEvent;
-use GeorgRinger\CartStripe\Configuration;
-use GeorgRinger\CartStripe\Service\StripeApi;
+use Schnitzler\CartStripe\Configuration;
+use Schnitzler\CartStripe\Service\StripeApi;
 use Psr\Http\Message\ServerRequestInterface;
 use Stripe\Checkout\Session;
 use Stripe\Coupon;

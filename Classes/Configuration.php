@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace GeorgRinger\CartStripe;
+namespace Schnitzler\CartStripe;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;

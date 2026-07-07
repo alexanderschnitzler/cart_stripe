@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace GeorgRinger\CartStripe\EventListener\Order\Payment;
+namespace Schnitzler\CartStripe\EventListener\Order\Payment;
 
 use Extcode\Cart\Event\Order\EventInterface;
 use Extcode\Cart\EventListener\Order\Finish\ClearCart as FinishClearCart;

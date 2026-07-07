@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace GeorgRinger\CartStripe\Controller\Order;
+namespace Schnitzler\CartStripe\Controller\Order;
 
 use Extcode\Cart\Controller\Cart\ActionController;
 use Extcode\Cart\Domain\Model\Cart;
@@ -12,9 +12,9 @@ use Extcode\Cart\Domain\Repository\Order\PaymentRepository;
 use Extcode\Cart\Event\Order\FinishEvent;
 use Extcode\Cart\Service\SessionHandler;
 use Extcode\Cart\Utility\CartUtility;
-use GeorgRinger\CartStripe\Service\StripeApi;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Schnitzler\CartStripe\Service\StripeApi;
 use Stripe\Checkout\Session;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Log\LogManager;

@@ -1,7 +1,7 @@
 <?php
 
-use GeorgRinger\CartStripe\Controller\Order\PaymentController;
-use GeorgRinger\CartStripe\Service\StripeApi;
+use Schnitzler\CartStripe\Controller\Order\PaymentController;
+use Schnitzler\CartStripe\Service\StripeApi;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') or die();
