@@ -1,32 +1,32 @@
 {
-  "name": "georgringer/cart-stripe",
-  "type": "typo3-cms-extension",
-  "description": "Shopping Cart(s) for TYPO3 - Stripe Payment Provider",
-  "license": [
-    "GPL-2.0+"
-  ],
-  "keywords": [
-    "TYPO3 CMS",
-    "Shopping Cart",
-    "stripe",
-    "cart"
-  ],
-  "autoload": {
-    "psr-4": {
-      "GeorgRinger\\CartStripe\\": "Classes"
+    "name": "georgringer/cart-stripe",
+    "description": "Shopping Cart(s) for TYPO3 - Stripe Payment Provider",
+    "license": [
+        "GPL-2.0+"
+    ],
+    "type": "typo3-cms-extension",
+    "keywords": [
+        "TYPO3 CMS",
+        "Shopping Cart",
+        "stripe",
+        "cart"
+    ],
+    "require": {
+        "ext-curl": "*",
+        "extcode/cart": "^10 || ^11",
+        "stripe/stripe-php": "^15",
+        "typo3/cms-core": "^12.4 || ^13.4",
+        "typo3/cms-extbase": "^12.4 || ^13.4",
+        "typo3/cms-frontend": "^12.4 || ^13.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "GeorgRinger\\CartStripe\\": "Classes"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "cart_stripe"
+        }
     }
-  },
-  "extra": {
-    "typo3/cms": {
-      "extension-key": "cart_stripe"
-    }
-  },
-  "require": {
-    "ext-curl": "*",
-    "typo3/cms-core": "^12.4||^13.4",
-    "typo3/cms-extbase": "^12.4||^13.4",
-    "typo3/cms-frontend": "^12.4||^13.4",
-    "extcode/cart": "^10||^11",
-    "stripe/stripe-php": "^15"
-  }
 }
