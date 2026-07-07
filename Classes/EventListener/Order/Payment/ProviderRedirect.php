@@ -17,16 +17,21 @@ use Schnitzler\CartStripe\Service\StripeApi;
 use Stripe\Checkout\Session;
 use Stripe\Coupon;
 use Stripe\TaxRate;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\ExtbaseRequestParameters;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
+#[AsEventListener(
+    identifier: 'cart-stripe--order--payment--clear-cart',
+)]
 class ProviderRedirect
 {
     protected OrderItem $orderItem;
@@ -46,8 +51,8 @@ class ProviderRedirect
     protected Configuration $configuration;
 
     public function __construct(
-        protected ConfigurationManager $configurationManager,
-        protected PersistenceManager $persistenceManager,
+        protected ConfigurationManagerInterface $configurationManager,
+        protected PersistenceManagerInterface $persistenceManager,
         protected TypoScriptService $typoScriptService,
         protected UriBuilder $uriBuilder,
         protected CartRepository $cartRepository,

@@ -6,7 +6,12 @@ namespace Schnitzler\CartStripe\EventListener\Order\Payment;
 
 use Extcode\Cart\Event\Order\EventInterface;
 use Extcode\Cart\EventListener\Order\Finish\ClearCart as FinishClearCart;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 
+#[AsEventListener(
+    identifier: 'cart-stripe--order--payment--clear-cart',
+    before: 'cart-stripe--order--payment--provider-redirect',
+)]
 class ClearCart extends FinishClearCart
 {
     public function __invoke(EventInterface $event): void
