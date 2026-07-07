@@ -1,9 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Schnitzler\CartStripe\EventListener\Order\Payment;
 
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use Extcode\Cart\Domain\Model\Cart;
 use Extcode\Cart\Domain\Model\Cart\Cart as CartCart;
 use Extcode\Cart\Domain\Model\Cart\ServiceInterface;
@@ -11,9 +11,9 @@ use Extcode\Cart\Domain\Model\Order\BillingAddress;
 use Extcode\Cart\Domain\Model\Order\Item as OrderItem;
 use Extcode\Cart\Domain\Repository\CartRepository;
 use Extcode\Cart\Event\Order\PaymentEvent;
+use Psr\Http\Message\ServerRequestInterface;
 use Schnitzler\CartStripe\Configuration;
 use Schnitzler\CartStripe\Service\StripeApi;
-use Psr\Http\Message\ServerRequestInterface;
 use Stripe\Checkout\Session;
 use Stripe\Coupon;
 use Stripe\TaxRate;
@@ -25,6 +25,7 @@ use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class ProviderRedirect
 {
@@ -205,7 +206,8 @@ class ProviderRedirect
                 ],
                 'description' => LocalizationUtility::translate(
                     'LLL:EXT:cart/Resources/Private/Language/locallang.xlf:tx_cart_domain_model_order_item.order_number',
-                    'cart') .
+                    'cart'
+                ) .
                     ' #' . $cart->getOrderItem()?->getOrderNumber(),
             ],
         ];
@@ -282,7 +284,8 @@ class ProviderRedirect
             ->setTargetPageType((int)$this->cartStripeConfiguration['redirectTypeNum'])
             ->setCreateAbsoluteUri(true)
             ->setArguments($arguments)
-            ->build();
+            ->build()
+        ;
     }
 
     private function getExtbaseRequest(): Request
@@ -301,7 +304,7 @@ class ProviderRedirect
     }
 
     /**
-     * Get or create a Stripe tax rate for the given percentage
+     * Get or create a Stripe tax rate for the given percentage.
      */
     private function getOrCreateTaxRateId(float $percentage): string
     {

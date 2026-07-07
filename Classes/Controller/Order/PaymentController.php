@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Schnitzler\CartStripe\Controller\Order;
 
 use Extcode\Cart\Controller\Cart\ActionController;
@@ -31,7 +32,7 @@ class PaymentController extends ActionController
 {
     protected LoggerInterface $logger;
 
-    protected ?Cart $cartObject = null;
+    protected Cart|null $cartObject = null;
 
     /**
      * @var array<mixed>
@@ -172,7 +173,7 @@ class PaymentController extends ActionController
      * `paid`. Everything else -- most notably `unpaid`, which is what delayed payment
      * methods return at redirect time -- must not finalize an order.
      */
-    private function sessionSettlesCart(?Session $session, string $hash): bool
+    private function sessionSettlesCart(Session|null $session, string $hash): bool
     {
         if (!$session instanceof Session) {
             return false;
@@ -220,7 +221,8 @@ class PaymentController extends ActionController
                 $queryBuilder->expr()->eq('s_hash', $queryBuilder->createNamedParameter($hash))
             )
             ->executeQuery()
-            ->fetchAssociative();
+            ->fetchAssociative()
+        ;
 
         if (!$row) {
             // todo exception
@@ -258,7 +260,7 @@ class PaymentController extends ActionController
      * Where the class does not exist the payload is restored as before -- it comes
      * from our own database row, so this must not fail the checkout.
      */
-    private function unserializeCart(string $payload): ?Cart\Cart
+    private function unserializeCart(string $payload): Cart\Cart|null
     {
         if ($payload === '') {
             return null;

@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Schnitzler\CartStripe\EventListener\Order\Payment;
 
 use Extcode\Cart\Event\Order\EventInterface;

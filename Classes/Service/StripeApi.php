@@ -1,11 +1,12 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Schnitzler\CartStripe\Service;
 
-use Schnitzler\CartStripe\Configuration;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Schnitzler\CartStripe\Configuration;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 
@@ -28,7 +29,8 @@ class StripeApi implements LoggerAwareInterface
 
     public function __construct(
         protected Configuration $configuration
-    ) {}
+    ) {
+    }
 
     public function initialize(): void
     {
@@ -46,7 +48,7 @@ class StripeApi implements LoggerAwareInterface
      * has paid, where an uncaught error would mean a 500 instead of a page telling
      * them to get in touch.
      */
-    public function retrieveSession(string $sessionId): ?Session
+    public function retrieveSession(string $sessionId): Session|null
     {
         if ($sessionId === '') {
             return null;
