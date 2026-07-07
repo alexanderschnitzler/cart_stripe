@@ -24,6 +24,9 @@
             "Schnitzler\\CartStripe\\": "Classes"
         }
     },
+    "config": {
+        "sort-packages": true
+    },
     "extra": {
         "typo3/cms": {
             "extension-key": "cart_stripe"
