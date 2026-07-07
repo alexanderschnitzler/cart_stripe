@@ -1,0 +1,15 @@
+includes:
+	- phpstan-baseline.neon
+
+parameters:
+	phpVersion: 80200
+	level: max
+	treatPhpDocTypesAsCertain: false
+	reportWrongPhpDocTypeInVarTag: true
+	reportMaybesInPropertyPhpDocTypes: false
+
+	paths:
+		- .
+	excludePaths:
+		- var
+		- vendor

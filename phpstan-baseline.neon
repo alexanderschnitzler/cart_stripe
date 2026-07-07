@@ -1,0 +1,133 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Cannot access offset ''handleShippingAsShippingOption'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Classes/Configuration.php
+
+		-
+			message: '#^Cannot access offset ''nonComposerAutoloadPath'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Classes/Configuration.php
+
+		-
+			message: '#^Cannot access offset ''stripeApiKey'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Classes/Configuration.php
+
+		-
+			message: '#^Property Schnitzler\\CartStripe\\Configuration\:\:\$nonComposerAutoloadPath \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: Classes/Configuration.php
+
+		-
+			message: '#^Property Schnitzler\\CartStripe\\Configuration\:\:\$stripeApiKey \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: Classes/Configuration.php
+
+		-
+			message: '#^Cannot access offset ''cart'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Classes/Controller/Order/PaymentController.php
+
+		-
+			message: '#^Cannot access offset ''pid'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Classes/Controller/Order/PaymentController.php
+
+		-
+			message: '#^Parameter \#1 \$cart of method Extcode\\Cart\\Domain\\Model\\Cart\:\:setCart\(\) expects Extcode\\Cart\\Domain\\Model\\Cart\\Cart, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Classes/Controller/Order/PaymentController.php
+
+		-
+			message: '#^Parameter \#1 \$data of function unserialize expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Classes/Controller/Order/PaymentController.php
+
+		-
+			message: '#^Parameter \#1 \$hash of method Schnitzler\\CartStripe\\Controller\\Order\\PaymentController\:\:loadCartByHash\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: Classes/Controller/Order/PaymentController.php
+
+		-
+			message: '#^Parameter \#1 \$key of method Extcode\\Cart\\Service\\SessionHandler\:\:writeCart\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Classes/Controller/Order/PaymentController.php
+
+		-
+			message: '#^Property Extcode\\Cart\\Controller\\Cart\\ActionController\:\:\$cart \(Extcode\\Cart\\Domain\\Model\\Cart\\Cart\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: Classes/Controller/Order/PaymentController.php
+
+		-
+			message: '#^Binary operation "\*" between mixed and 100 results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 3
+			path: Classes/EventListener/Order/Payment/ProviderRedirect.php
+
+		-
+			message: '#^Cannot access offset ''cart'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Classes/EventListener/Order/Payment/ProviderRedirect.php
+
+		-
+			message: '#^Cannot access offset ''order'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Classes/EventListener/Order/Payment/ProviderRedirect.php
+
+		-
+			message: '#^Cannot access offset ''pid'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: Classes/EventListener/Order/Payment/ProviderRedirect.php
+
+		-
+			message: '#^Cannot call method getTitle\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Classes/EventListener/Order/Payment/ProviderRedirect.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 3
+			path: Classes/EventListener/Order/Payment/ProviderRedirect.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Classes/EventListener/Order/Payment/ProviderRedirect.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: Classes/EventListener/Order/Payment/ProviderRedirect.php
+
+		-
+			message: '#^Cannot access offset mixed on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ext_emconf.php
+
+		-
+			message: '#^Variable \$_EXTKEY might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: ext_emconf.php
