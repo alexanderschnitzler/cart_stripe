@@ -12,6 +12,9 @@
             <trans-unit id="tx_cartstripe.controller.order.payment.action.success.access_denied">
                 <source>Access denied!</source>
             </trans-unit>
+            <trans-unit id="tx_cartstripe.controller.order.payment.action.success.not_verified">
+                <source>The payment could not be confirmed with Stripe. If you have been charged, please contact us before paying again.</source>
+            </trans-unit>
             <trans-unit id="tx_cartstripe.controller.order.payment.action.cancel.successfully_canceled">
                 <source>The order has been canceled.</source>
             </trans-unit>
@@ -20,6 +23,9 @@
             </trans-unit>
             <trans-unit id="tx_cartstripe.controller.order.payment.action.cancel.access_denied">
                 <source>Access denied!</source>
+            </trans-unit>
+            <trans-unit id="tx_cartstripe.controller.order.payment.action.cancel.already_paid">
+                <source>This order has already been paid and cannot be canceled here.</source>
             </trans-unit>
         </body>
     </file>

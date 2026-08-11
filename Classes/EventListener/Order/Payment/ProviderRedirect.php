@@ -12,11 +12,10 @@ use Extcode\Cart\Domain\Model\Order\Item as OrderItem;
 use Extcode\Cart\Domain\Repository\CartRepository;
 use Extcode\Cart\Event\Order\PaymentEvent;
 use GeorgRinger\CartStripe\Configuration;
-use http\Exception\UnexpectedValueException;
+use GeorgRinger\CartStripe\Service\StripeApi;
 use Psr\Http\Message\ServerRequestInterface;
 use Stripe\Checkout\Session;
 use Stripe\Coupon;
-use Stripe\Stripe;
 use Stripe\TaxRate;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -50,7 +49,9 @@ class ProviderRedirect
         protected PersistenceManager $persistenceManager,
         protected TypoScriptService $typoScriptService,
         protected UriBuilder $uriBuilder,
-        protected CartRepository $cartRepository
+        protected CartRepository $cartRepository,
+        protected StripeApi $stripeApi,
+        Configuration $configuration
     ) {
         $this->cartConf = $this->configurationManager->getConfiguration(
             ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK,
@@ -61,8 +62,7 @@ class ProviderRedirect
             ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK,
             'CartStripe'
         );
-        $this->configuration = new Configuration();
-        $this->loadApi();
+        $this->configuration = $configuration;
     }
 
     public function __invoke(PaymentEvent $event): void
@@ -74,7 +74,7 @@ class ProviderRedirect
 
         $this->cart = $event->getCart();
         $cart = $this->saveCurrentCartToDatabase();
-        Stripe::setApiKey($this->configuration->getStripeApiKey());
+        $this->stripeApi->initialize();
 
         $lineItems = [];
         foreach ($cart->getCart()?->getProducts() ?? [] as $product) {
@@ -185,12 +185,17 @@ class ProviderRedirect
             'mode' => 'payment',
             'customer_creation' => 'if_required',
             'customer_email' => $billingAddress instanceof BillingAddress ? $billingAddress->getEmail() : '',
-            'success_url' => $this->getUrl('success', $this->cartSHash),
-            'cancel_url' => $this->getUrl('cancel', $this->cartSHash),
+            'success_url' => $this->getReturnUrl('success', $this->cartSHash),
+            'cancel_url' => $this->getReturnUrl('cancel', $this->cartSHash),
             'client_reference_id' => $cart->getOrderItem()?->getOrderNumber(),
             // Meta data for the session
             'metadata' => [
                 'orderNumber' => $cart->getOrderItem()?->getOrderNumber(),
+                // Binds the session to this cart row. PaymentController compares it
+                // against the hash it was called with, so a session that was paid for
+                // one cart cannot settle another. Unlike the order number this is
+                // guaranteed to exist at this point.
+                'cartSHash' => $this->cartSHash,
             ],
 
             // Information for the Payment Intent
@@ -238,6 +243,19 @@ class ProviderRedirect
         return $cart;
     }
 
+    /**
+     * Stripe substitutes {CHECKOUT_SESSION_ID} in the return URLs. It has to be
+     * appended raw -- UriBuilder would percent-encode the braces and Stripe only
+     * replaces the literal placeholder. The id is what lets the return actions ask
+     * Stripe whether the payment actually happened instead of trusting the browser.
+     */
+    protected function getReturnUrl(string $action, string $hash): string
+    {
+        $url = $this->getUrl($action, $hash);
+
+        return $url . (str_contains($url, '?') ? '&' : '?') . 'session_id={CHECKOUT_SESSION_ID}';
+    }
+
     protected function getUrl(string $action, string $hash): string
     {
         $pid = (int)$this->cartConf['settings']['cart']['pid'];
@@ -273,21 +291,6 @@ class ProviderRedirect
         );
 
         return $extbaseRequest;
-    }
-
-    private function loadApi(): void
-    {
-        if (class_exists(Session::class)) {
-            return;
-        }
-        $path = $this->configuration->getNonComposerAutoloadPath();
-        if ($path === '' || $path === '0') {
-            throw new UnexpectedValueException('No path to non composer autoload found', 1627993943);
-        }
-        if (!is_file($path)) {
-            throw new UnexpectedValueException('No file found at path ' . $path, 1627993944);
-        }
-        require_once $path;
     }
 
     /**
