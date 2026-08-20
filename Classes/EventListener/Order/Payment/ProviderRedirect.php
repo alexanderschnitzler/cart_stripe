@@ -248,12 +248,19 @@ class ProviderRedirect
      * appended raw -- UriBuilder would percent-encode the braces and Stripe only
      * replaces the literal placeholder. The id is what lets the return actions ask
      * Stripe whether the payment actually happened instead of trusting the browser.
+     *
+     * Appending it after the fact means the parameter is not covered by the cHash the
+     * UriBuilder just calculated, so it has to be excluded from cache hash calculation
+     * -- see ext_localconf.php. Without that exclusion every return from Stripe is
+     * answered with a 404 by PageArgumentValidator.
      */
     protected function getReturnUrl(string $action, string $hash): string
     {
         $url = $this->getUrl($action, $hash);
 
-        return $url . (str_contains($url, '?') ? '&' : '?') . 'session_id={CHECKOUT_SESSION_ID}';
+        return $url
+            . (str_contains($url, '?') ? '&' : '?')
+            . StripeApi::SESSION_ID_PARAMETER . '={CHECKOUT_SESSION_ID}';
     }
 
     protected function getUrl(string $action, string $hash): string

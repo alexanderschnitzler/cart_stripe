@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace GeorgRinger\CartStripe\Service;
 
 use GeorgRinger\CartStripe\Configuration;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Stripe\Checkout\Session;
-use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 
 /**
@@ -13,8 +14,18 @@ use Stripe\Stripe;
  * server-side. Shared by the redirect listener and the return actions so both talk
  * to Stripe through the same key and the same non-composer autoload handling.
  */
-class StripeApi
+class StripeApi implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
+    /**
+     * Query parameter carrying Stripe's {CHECKOUT_SESSION_ID} back to the return
+     * actions. Deliberately not named `session_id`: the name has to be added to the
+     * cHash exclude list in ext_localconf.php, and excluding something that generic
+     * from cache hash calculation site-wide would affect other extensions too.
+     */
+    public const SESSION_ID_PARAMETER = 'cartStripeSessionId';
+
     public function __construct(
         protected Configuration $configuration
     ) {}
@@ -27,8 +38,13 @@ class StripeApi
 
     /**
      * Returns null for anything that is not a session we can read -- an empty or
-     * forged id, a revoked key, Stripe being unreachable. Callers must treat null
-     * as "not verified" and never fall back to trusting the request.
+     * forged id, a revoked key, Stripe being unreachable, a misconfigured non-composer
+     * autoload path. Callers must treat null as "not verified" and never fall back to
+     * trusting the request.
+     *
+     * Every failure is caught, not only ApiErrorException: this runs after the buyer
+     * has paid, where an uncaught error would mean a 500 instead of a page telling
+     * them to get in touch.
      */
     public function retrieveSession(string $sessionId): ?Session
     {
@@ -36,11 +52,16 @@ class StripeApi
             return null;
         }
 
-        $this->initialize();
-
         try {
+            $this->initialize();
+
             return Session::retrieve($sessionId);
-        } catch (ApiErrorException) {
+        } catch (\Throwable $exception) {
+            $this->logger?->error('Could not retrieve Stripe Checkout Session', [
+                'sessionId' => $sessionId,
+                'exception' => $exception,
+            ]);
+
             return null;
         }
     }

@@ -18,6 +18,8 @@ use Psr\Log\LoggerAwareTrait;
 use Stripe\Checkout\Session;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Log\LogManager;
+use TYPO3\CMS\Core\Serializer\Exception\PolymorphicDeserializerException;
+use TYPO3\CMS\Core\Serializer\PolymorphicDeserializer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -94,7 +96,7 @@ class PaymentController extends ActionController
             // choose when to call this action. Only Stripe's own answer for exactly
             // this cart may settle the payment.
             $session = $this->stripeApi->retrieveSession(
-                (string)($this->request->getQueryParams()['session_id'] ?? '')
+                (string)($this->request->getQueryParams()[StripeApi::SESSION_ID_PARAMETER] ?? '')
             );
 
             if (!$this->sessionSettlesCart($session, $hash)) {
@@ -161,10 +163,15 @@ class PaymentController extends ActionController
     }
 
     /**
-     * A Checkout Session may settle a cart only if Stripe reports it as paid *and* it
-     * was created for this very cart. Without the second check a single paid session
-     * -- the attacker's own one-cent order, say -- could be replayed against every
-     * other cart whose hash is known.
+     * A Checkout Session may settle a cart only if Stripe reports it as completed and
+     * settled *and* it was created for this very cart. Without the second check a
+     * single paid session -- the attacker's own one-cent order, say -- could be
+     * replayed against every other cart whose hash is known.
+     *
+     * `no_payment_required` is a settled session as well: a coupon covering the full
+     * amount leaves nothing to charge, and Stripe never reports such a session as
+     * `paid`. Everything else -- most notably `unpaid`, which is what delayed payment
+     * methods return at redirect time -- must not finalize an order.
      */
     private function sessionSettlesCart(?Session $session, string $hash): bool
     {
@@ -172,7 +179,8 @@ class PaymentController extends ActionController
             return false;
         }
 
-        return $session->payment_status === 'paid'
+        return $session->status === 'complete'
+            && in_array($session->payment_status, ['paid', 'no_payment_required'], true)
             && (string)($session->metadata['cartSHash'] ?? '') === $hash;
     }
 
@@ -218,11 +226,11 @@ class PaymentController extends ActionController
             return;
         }
 
-        // The second argument of unserialize() is an options array and only knows the
-        // key 'allowed_classes'. This used to be passed as a bare list, so the key was
-        // never found and PHP silently allowed *every* class. Spelled out here -- see
-        // the note in the Readme about narrowing this to an explicit allow list.
-        $unserializedCart = unserialize($row['serialized_cart'], ['allowed_classes' => true]);
+        $unserializedCart = $this->unserializeCart((string)$row['serialized_cart']);
+        if (!$unserializedCart instanceof Cart\Cart) {
+            return;
+        }
+
         $dataMapper = GeneralUtility::makeInstance(DataMapper::class);
         $items = $dataMapper->map(Cart::class, [$row]);
         /** @var Cart $cartObject */
@@ -230,5 +238,54 @@ class PaymentController extends ActionController
         $cartObject->setCart($unserializedCart);
         $this->cart = $unserializedCart;
         $this->cartObject = $cartObject;
+    }
+
+    /**
+     * Restoring a PHP-serialized payload instantiates whatever classes the payload
+     * names. This used to call unserialize() with a bare class list as second
+     * argument -- that argument is an options array, so the key 'allowed_classes' was
+     * never found and PHP silently allowed *every* class.
+     *
+     * TYPO3\CMS\Core\Serializer\PolymorphicDeserializer (v13.4.23 and above)
+     * validates the class names in the payload before anything is instantiated and
+     * accepts subclasses of the listed types, which is why the allow list can be
+     * interfaces: EXT:cart resolves products, services and tax classes through
+     * factories, so a project may have its own implementations in the payload. The
+     * list itself follows what Cart::__sleep() writes.
+     *
+     * Where the class does not exist the payload is restored as before -- it comes
+     * from our own database row, so this must not fail the checkout.
+     */
+    private function unserializeCart(string $payload): ?Cart\Cart
+    {
+        if ($payload === '') {
+            return null;
+        }
+
+        if (!class_exists(PolymorphicDeserializer::class)) {
+            $cart = @unserialize($payload, ['allowed_classes' => true]);
+
+            return $cart instanceof Cart\Cart ? $cart : null;
+        }
+
+        try {
+            $cart = (new PolymorphicDeserializer())->deserialize($payload, [
+                Cart\Cart::class,
+                Cart\ProductInterface::class,
+                Cart\BeVariantInterface::class,
+                Cart\FeVariantInterface::class,
+                Cart\ServiceInterface::class,
+                Cart\TaxClassInterface::class,
+                Cart\CartCouponInterface::class,
+            ]);
+        } catch (PolymorphicDeserializerException $exception) {
+            $this->logger->error('Could not restore serialized cart', [
+                'exception' => $exception,
+            ]);
+
+            return null;
+        }
+
+        return $cart instanceof Cart\Cart ? $cart : null;
     }
 }
