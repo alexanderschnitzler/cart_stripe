@@ -30,7 +30,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 #[AsEventListener(
-    identifier: 'cart-stripe--order--payment--clear-cart',
+    identifier: 'cart-stripe--order--payment--provider-redirect',
 )]
 class ProviderRedirect
 {
