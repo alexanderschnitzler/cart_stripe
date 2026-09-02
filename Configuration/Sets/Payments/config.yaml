@@ -1,0 +1,4 @@
+name: schnitzler/cart-stripe-payments
+label: 'Cart Stripe - Payments'
+dependencies:
+    - extcode/cart-payments

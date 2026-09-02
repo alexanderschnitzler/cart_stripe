@@ -1,0 +1,35 @@
+plugin.tx_cart {
+    payments {
+        countries.at {
+            options.29 {
+                provider = STRIPE
+                title = Stripe
+                extra = 0.00
+                taxClassId = 1
+                status = open
+                preventClearCart = 1
+            }
+        }
+
+        countries.de {
+            options.29 {
+                provider = STRIPE
+                title = Stripe
+                extra = 0.00
+                taxClassId = 1
+                status = open
+                preventClearCart = 1
+            }
+        }
+        countries.ch {
+            options.29 {
+                provider = STRIPE
+                title = Stripe
+                extra = 0.00
+                taxClassId = 1
+                status = open
+                preventClearCart = 1
+            }
+        }
+    }
+}

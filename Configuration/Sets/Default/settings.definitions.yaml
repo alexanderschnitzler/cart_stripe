@@ -1,0 +1,20 @@
+categories:
+    cartstripe:
+        label: 'Cart Stripe'
+
+settings:
+    plugin.tx_cartstripe.sandbox:
+        label: 'plugin.tx_cartstripe.sandbox'
+        type: bool
+        default: false
+        category: cartstripe
+    plugin.tx_cartstripe.redirectTypeNum:
+        label: 'plugin.tx_cartstripe.redirectTypeNum'
+        type: number
+        default: 2278101
+        category: cartstripe
+    plugin.tx_cartstripe.sendEachItemToStripe:
+        label: 'plugin.tx_cartstripe.sendEachItemToStripe'
+        type: bool
+        default: true
+        category: cartstripe
