@@ -14,11 +14,11 @@
     "require": {
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "ext-curl": "*",
-        "extcode/cart": "^11.0 || dev-main",
+        "extcode/cart": "^12",
         "stripe/stripe-php": "^15",
-        "typo3/cms-core": "~13.4.0 || ~14.3.0",
-        "typo3/cms-extbase": "~13.4.0 || ~14.3.0",
-        "typo3/cms-frontend": "~13.4.0 || ~14.3.0"
+        "typo3/cms-core": "~14.3.0",
+        "typo3/cms-extbase": "~14.3.0",
+        "typo3/cms-frontend": "~14.3.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.95",
