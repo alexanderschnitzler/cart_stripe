@@ -41,7 +41,11 @@
     },
     "extra": {
         "typo3/cms": {
-            "extension-key": "cart_stripe"
+            "extension-key": "cart_stripe",
+            "version": "14.3.0",
+            "Package": {
+                "providesPackages": []
+            }
         }
     }
 }
