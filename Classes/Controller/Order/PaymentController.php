@@ -57,6 +57,7 @@ class PaymentController extends ActionController
         $this->cartUtility = $cartUtility;
     }
 
+    #[\Override]
     public function initializeAction(): void
     {
         $this->cartConf =

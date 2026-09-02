@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+defined('TYPO3') || exit('Access to file "' . basename(__FILE__) . '" denied.');
+
 use Schnitzler\CartStripe\Controller\Order\PaymentController;
 use Schnitzler\CartStripe\Service\StripeApi;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;

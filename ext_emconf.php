@@ -1,18 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
+defined('TYPO3') || exit('Access to file "' . basename(__FILE__) . '" denied.');
+
+/** @var array $EM_CONF */
+/** @var string $_EXTKEY */
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Cart - Stripe',
     'description' => 'Shopping Cart(s) for TYPO3 - Stripe Payment Provider',
     'category' => 'services',
     'author' => 'Alexander Schnitzler',
     'author_email' => 'git@alexanderschnitzler.de',
-    'state' => 'alpha',
-    'version' => '0.0.3',
+    'state' => 'stable',
+    'version' => '14.3.0',
     'constraints' => [
-        'depends' => [
-            'typo3' => '12.4.0-13.4.99',
-            'cart' => '9.0.0-11.99.99',
-        ],
+        'depends' => [],
         'conflicts' => [],
         'suggests' => [],
     ],
