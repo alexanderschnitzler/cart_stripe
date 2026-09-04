@@ -95,9 +95,8 @@ class PaymentController extends ActionController
             // part of the cancel_url they are sent to when they abort -- and they
             // choose when to call this action. Only Stripe's own answer for exactly
             // this cart may settle the payment.
-            $session = $this->stripeApi->retrieveSession(
-                (string)($this->request->getQueryParams()[StripeApi::SESSION_ID_PARAMETER] ?? '')
-            );
+            $sessionId = $this->request->getQueryParams()[StripeApi::SESSION_ID_PARAMETER] ?? '';
+            $session = $this->stripeApi->retrieveSession(is_string($sessionId) ? $sessionId : '');
 
             if (!$this->sessionSettlesCart($session, $hash)) {
                 $this->logger->warning('Rejected unverified Stripe payment return', [
@@ -179,9 +178,11 @@ class PaymentController extends ActionController
             return false;
         }
 
+        $cartSHash = $session->metadata['cartSHash'] ?? '';
+
         return $session->status === 'complete'
             && in_array($session->payment_status, ['paid', 'no_payment_required'], true)
-            && (string)($session->metadata['cartSHash'] ?? '') === $hash;
+            && is_string($cartSHash) && $cartSHash === $hash;
     }
 
     private function getHashArgument(): string
@@ -226,7 +227,8 @@ class PaymentController extends ActionController
             return;
         }
 
-        $unserializedCart = $this->unserializeCart((string)$row['serialized_cart']);
+        $serializedCart = $row['serialized_cart'] ?? '';
+        $unserializedCart = $this->unserializeCart(is_string($serializedCart) ? $serializedCart : '');
         if (!$unserializedCart instanceof Cart\Cart) {
             return;
         }
