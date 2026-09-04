@@ -119,15 +119,3 @@ parameters:
 			identifier: booleanAnd.rightAlwaysTrue
 			count: 1
 			path: Classes/EventListener/Order/Payment/ProviderRedirect.php
-
-		-
-			message: '#^Cannot access offset mixed on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: ext_emconf.php
-
-		-
-			message: '#^Variable \$_EXTKEY might not be defined\.$#'
-			identifier: variable.undefined
-			count: 1
-			path: ext_emconf.php
