@@ -8,8 +8,6 @@ use Schnitzler\CartStripe\Controller\Order\PaymentController;
 use Schnitzler\CartStripe\Service\StripeApi;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
-defined('TYPO3') or exit;
-
 ExtensionUtility::configurePlugin(
     'CartStripe',
     'Cart',
