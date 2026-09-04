@@ -43,32 +43,8 @@ parameters:
 			path: Classes/Controller/Order/PaymentController.php
 
 		-
-			message: '#^Parameter \#1 \$cart of method Extcode\\Cart\\Domain\\Model\\Cart\:\:setCart\(\) expects Extcode\\Cart\\Domain\\Model\\Cart\\Cart, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: Classes/Controller/Order/PaymentController.php
-
-		-
-			message: '#^Parameter \#1 \$data of function unserialize expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: Classes/Controller/Order/PaymentController.php
-
-		-
-			message: '#^Parameter \#1 \$hash of method Schnitzler\\CartStripe\\Controller\\Order\\PaymentController\:\:loadCartByHash\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: Classes/Controller/Order/PaymentController.php
-
-		-
 			message: '#^Parameter \#1 \$key of method Extcode\\Cart\\Service\\SessionHandler\:\:writeCart\(\) expects string, mixed given\.$#'
 			identifier: argument.type
-			count: 1
-			path: Classes/Controller/Order/PaymentController.php
-
-		-
-			message: '#^Property Extcode\\Cart\\Controller\\Cart\\ActionController\:\:\$cart \(Extcode\\Cart\\Domain\\Model\\Cart\\Cart\) does not accept mixed\.$#'
-			identifier: assign.propertyType
 			count: 1
 			path: Classes/Controller/Order/PaymentController.php
 
@@ -119,3 +95,27 @@ parameters:
 			identifier: booleanAnd.rightAlwaysTrue
 			count: 1
 			path: Classes/EventListener/Order/Payment/ProviderRedirect.php
+
+		-
+			message: '#^Cannot access an offset on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ext_localconf.php
+
+		-
+			message: '#^Cannot access offset ''FE'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ext_localconf.php
+
+		-
+			message: '#^Cannot access offset ''cacheHash'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ext_localconf.php
+
+		-
+			message: '#^Cannot access offset ''excludedParameters'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ext_localconf.php
