@@ -19,7 +19,7 @@ use Schnitzler\CartStripe\Service\StripeApi;
 use Stripe\Checkout\Session;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Log\LogManager;
-use TYPO3\CMS\Core\Serializer\Exception\PolymorphicDeserializerException;
+use TYPO3\CMS\Core\Serializer\Exception\DeserializerException;
 use TYPO3\CMS\Core\Serializer\PolymorphicDeserializer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -282,7 +282,7 @@ class PaymentController extends ActionController
                 Cart\TaxClassInterface::class,
                 Cart\CartCouponInterface::class,
             ]);
-        } catch (PolymorphicDeserializerException $exception) {
+        } catch (DeserializerException $exception) {
             $this->logger->error('Could not restore serialized cart', [
                 'exception' => $exception,
             ]);
